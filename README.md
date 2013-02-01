@@ -1,4 +1,4 @@
-# Solutions to TopCoder SRM 566 problems
+# Solutions to Facebook Hacker Cup 2013 problems
 
 This repository contains solutions to [Facebook Hacker Cup 2013][1] problems. These solutions are provided "as is". I give no guarantees that they will work as expected.
 
