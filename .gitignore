@@ -1,0 +1,6 @@
+.project
+bin/
+.classpath
+.settings/
+in*.txt
+out*.txt
