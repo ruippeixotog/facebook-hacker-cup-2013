@@ -24,11 +24,6 @@ public class DeadPixels {
 			else
 				return y - o.y;
 		}
-
-		@Override
-		public String toString() {
-			return "Pixel [x=" + x + ", y=" + y + "]";
-		}
 	}
 
 	public static void main(String[] args) throws FileNotFoundException {
@@ -44,21 +39,16 @@ public class DeadPixels {
 					.nextInt(), a = in.nextInt(), b = in.nextInt(), c = in
 					.nextInt(), d = in.nextInt();
 
-			int[] x = new int[N];
-			int[] y = new int[N];
 			Pixel[] pixels = new Pixel[N];
-
-			x[0] = X;
-			y[0] = Y;
 			pixels[0] = new Pixel(X, Y);
 			for (int i = 1; i < N; i++) {
-				x[i] = (x[i - 1] * a + y[i - 1] * b + 1) % W;
-				y[i] = (x[i - 1] * c + y[i - 1] * d + 1) % H;
-				pixels[i] = new Pixel(x[i], y[i]);
+				int x = (pixels[i - 1].x * a + pixels[i - 1].y * b + 1) % W;
+				int y = (pixels[i - 1].x * c + pixels[i - 1].y * d + 1) % H;
+				pixels[i] = new Pixel(x, y);
 			}
 			Arrays.sort(pixels);
-//			System.out.println("Screen: " + W + "x" + H + "; pic: " + P + "x"
-//					+ Q + "; " + N + " dead pixels");
+			// System.out.println("Screen: " + W + "x" + H + "; pic: " + P + "x"
+			// + Q + "; " + N + " dead pixels");
 
 			long result = safeLocations(pixels, 0, 0, W, H, P, Q);
 			out.println(String.format("Case #%d: %d", t + 1, result));
@@ -77,23 +67,20 @@ public class DeadPixels {
 
 		int idx = midIdx;
 		Pixel midRight = new Pixel(Integer.MAX_VALUE / 2, 0);
-		while (idx < pixels.length) {
-			if (pixels[idx].y >= y0 && pixels[idx].y < y0 + h) {
-				midRight = pixels[idx];
-				break;
-			}
+		while (idx < pixels.length
+				&& (pixels[idx].y < y0 || pixels[idx].y >= y0 + h)) {
 			idx++;
 		}
+		if (idx < pixels.length)
+			midRight = pixels[idx];
 
 		idx = midIdx - 1;
 		Pixel midLeft = new Pixel(Integer.MIN_VALUE / 2, 0);
-		while (idx >= 0) {
-			if (pixels[idx].y >= y0 && pixels[idx].y < y0 + h) {
-				midLeft = pixels[idx];
-				break;
-			}
+		while (idx >= 0 && (pixels[idx].y < y0 || pixels[idx].y >= y0 + h)) {
 			idx--;
 		}
+		if (idx >= 0)
+			midLeft = pixels[idx];
 
 		if (midLeft.x < x0 && midRight.x >= x0 + w) {
 			return (w - p + 1) * (h - q + 1);
