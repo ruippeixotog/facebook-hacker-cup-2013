@@ -3,8 +3,6 @@ import java.io.FileNotFoundException;
 import java.io.PrintStream;
 import java.util.Arrays;
 import java.util.Scanner;
-import java.util.SortedSet;
-import java.util.TreeSet;
 
 public class DeadPixels {
 
@@ -49,59 +47,59 @@ public class DeadPixels {
 			int[] x = new int[N];
 			int[] y = new int[N];
 			Pixel[] pixels = new Pixel[N];
-			TreeSet<Pixel> tree = new TreeSet<>();
 
 			x[0] = X;
 			y[0] = Y;
 			pixels[0] = new Pixel(X, Y);
-			tree.add(pixels[0]);
 			for (int i = 1; i < N; i++) {
 				x[i] = (x[i - 1] * a + y[i - 1] * b + 1) % W;
 				y[i] = (x[i - 1] * c + y[i - 1] * d + 1) % H;
 				pixels[i] = new Pixel(x[i], y[i]);
-				tree.add(pixels[i]);
 			}
 			Arrays.sort(pixels);
-//			System.out.println("Screen: " + W + "x" + H + "; pic: " + P + "x" + Q);
-//			System.out.println(tree);
+//			System.out.println("Screen: " + W + "x" + H + "; pic: " + P + "x"
+//					+ Q + "; " + N + " dead pixels");
 
-			long result = safeLocations(pixels, tree, 0, 0, W, H, P, Q);
+			long result = safeLocations(pixels, 0, 0, W, H, P, Q);
 			out.println(String.format("Case #%d: %d", t + 1, result));
 		}
 	}
 
-	static long safeLocations(Pixel[] pixels, TreeSet<Pixel> tree, int x0,
-			int y0, int w, int h, int p, int q) {
+	static long safeLocations(Pixel[] pixels, int x0, int y0, int w, int h,
+			int p, int q) {
 		if (w < p || h < q)
 			return 0;
 
-		int mid = x0 + (w / 2);
-		SortedSet<Pixel> set = tree.tailSet(new Pixel(mid, 0));
+		Pixel mid = new Pixel(x0 + w / 2, y0 + h / 2);
+		int midIdx = Arrays.binarySearch(pixels, mid);
+		if (midIdx < 0)
+			midIdx = -(midIdx + 1);
+
+		int idx = midIdx;
 		Pixel midRight = new Pixel(Integer.MAX_VALUE / 2, 0);
-		while (!set.isEmpty()) {
-			Pixel pix = set.first();
-			if (pix.y >= y0 && pix.y < y0 + h) {
-				midRight = pix;
+		while (idx < pixels.length) {
+			if (pixels[idx].y >= y0 && pixels[idx].y < y0 + h) {
+				midRight = pixels[idx];
 				break;
 			}
-			set = set.tailSet(new Pixel(pix.x, pix.y + 1));
+			idx++;
 		}
 
-		set = tree.headSet(new Pixel(mid, 0));
+		idx = midIdx - 1;
 		Pixel midLeft = new Pixel(Integer.MIN_VALUE / 2, 0);
-		while (!set.isEmpty()) {
-			Pixel pix = set.last();
-			if (pix.y >= y0 && pix.y < y0 + h) {
-				midLeft = pix;
+		while (idx >= 0) {
+			if (pixels[idx].y >= y0 && pixels[idx].y < y0 + h) {
+				midLeft = pixels[idx];
 				break;
 			}
-			set = set.headSet(pix);
+			idx--;
 		}
 
 		if (midLeft.x < x0 && midRight.x >= x0 + w) {
 			return (w - p + 1) * (h - q + 1);
 		}
-		Pixel pivot = mid - midLeft.x < midRight.x - mid ? midLeft : midRight;
+		Pixel pivot = mid.x - midLeft.x <= midRight.x - mid.x ? midLeft
+				: midRight;
 
 		int vertX0 = Math.max(x0, pivot.x - p + 1);
 		int vertX1 = Math.min(x0 + w, pivot.x + p);
@@ -114,8 +112,7 @@ public class DeadPixels {
 		long results = 0;
 		for (int[] pa : subParams) {
 			// System.out.println("Subproblem: " + Arrays.toString(pa));
-			results += safeLocations(pixels, tree, pa[0], pa[1], pa[2], pa[3],
-					p, q);
+			results += safeLocations(pixels, pa[0], pa[1], pa[2], pa[3], p, q);
 		}
 		return results;
 	}

@@ -16,7 +16,7 @@ Here is a list of the problems currently in this repository. Problems marked wit
 
 * ✓ [20: Card Game][round11] (`CardGame.java`)
 * ✓ [35: Security][round12] (`Security.java`)
-* ✗ [45: Dead Pixels][round13] (`DeadPixels.java`)
+* ✓ [45: Dead Pixels][round13] (`DeadPixels.java`)
 
 [1]: https://www.facebook.com/hackercup
 [qual1]: https://www.facebook.com/hackercup/problems.php?pid=475986555798659&round=185564241586420
