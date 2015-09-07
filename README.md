@@ -1,10 +1,10 @@
-# Solutions to Facebook Hacker Cup 2013 problems
+# Facebook Hacker Cup 2013
 
-This repository contains solutions to [Facebook Hacker Cup 2013][1] problems. These solutions are provided "as is". I give no guarantees that they will work as expected.
+This repository contains my solutions to the problems from [Facebook Hacker Cup 2013][1]. These solutions are provided "as is" - I give no guarantees that they will work as expected.
 
-## Problems status
+## Problems Solved
 
-Here is a list of the problems currently in this repository. Problems marked with ✓ are done, while problems with ✗ are not complete and/or aren't efficient enough.
+The following is the list of the problems solved. Each problem identifier is specified between round brackets. Problems marked with ✓ are done, while problems with ✗ are not complete or aren't efficient enough for the problem's limits.
 
 ### Qualification Round
 
